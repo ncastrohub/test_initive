@@ -2,9 +2,9 @@ import unittest
 from datetime import datetime, timedelta
 from model import (
     ReservationPerHour, 
-    # ReservationPerDay, 
+    ReservationPerDay, 
     # ReservationPerWeek, 
-    # COST_PER_DAY, 
+    COST_PER_DAY, 
     COST_PER_HOUR, 
     # COST_PER_WEEK, 
     # FAMILY_DISCOUNT
@@ -46,17 +46,16 @@ class TestReservation(unittest.TestCase):
         )
 
 
-    # def test_when_rent_a_bike_per_day_the_price_is_per_each_day(self):
-    #     start_date = datetime.now()
-    #     reservation = ReservationPerDay(start_date)
-    #     start_date = date.today()
-    #     reserved_days = 5
-    #     end_date = start_date + datetime.timedelta(days=reserved_days)
-    #     reservation.end(end_date)
-    #     self.assertEqual(
-    #         COST_PER_DAY * reserved_days, 
-    #         reservation.final_price()
-    #     )
+    def test_when_rent_a_bike_per_day_the_price_is_per_each_day(self):
+        start_date = datetime.now()
+        reservation = ReservationPerDay(start_date)
+        reserved_days = 5
+        end_date = start_date + timedelta(days=reserved_days)
+        reservation.end(end_date)
+        self.assertEqual(
+            COST_PER_DAY * reserved_days, 
+            reservation.final_price()
+        )
 
 
     # def test_when_rent_a_bike_per_week_the_price_is_per_each_week(self):
