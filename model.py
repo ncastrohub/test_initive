@@ -32,6 +32,8 @@ class ReservationLeaf(AbstractReservation, metaclass=ABCMeta):
 
 class FamilyReservation(AbstractReservation):
     def __init__(self, child_reservations):
+        if len(child_reservations) > 5:
+            raise InvalidAmountOfReservationsOnFamiliyError()
         self.child_reservations = child_reservations
 
     def final_price(self):
@@ -67,3 +69,7 @@ class ReservationPerWeek(ReservationLeaf):
         delta = self._get_time_delta()
         weeks = math.ceil(delta.days / 7)
         return weeks * COST_PER_WEEK
+
+
+class InvalidAmountOfReservationsOnFamiliyError(Exception):
+    pass        

@@ -10,7 +10,8 @@ from model import (
     COST_PER_DAY, 
     COST_PER_HOUR, 
     COST_PER_WEEK, 
-    FAMILY_DISCOUNT
+    FAMILY_DISCOUNT,
+    InvalidAmountOfReservationsOnFamiliyError
 )
 
 # Context
@@ -103,21 +104,22 @@ class TestReservation(unittest.TestCase):
         )
 
 
-    # def test_family_reservation_cannot_have\
-    #     _more_than_five_asociated_rentals(self):
-    #     start_date = datetime.now()
+    def test_family_reservation_max_amount_of_childs(self):
+        """When a family reservation has more 
+        than 5 reservation childs, its fails"""
+        start_date = datetime.now()
 
-    #     reservation_list = [
-    #         ReservationPerHour(start_date) 
-    #         ,ReservationPerDay(start_date)
-    #         ,ReservationPerDay(start_date)
-    #         ,ReservationPerWeek(start_date)
-    #         ,ReservationPerWeek(start_date)
-    #         ,ReservationPerWeek(start_date)
-    #     ]
+        reservation_list = [
+            ReservationPerHour(start_date) 
+            ,ReservationPerDay(start_date)
+            ,ReservationPerDay(start_date)
+            ,ReservationPerWeek(start_date)
+            ,ReservationPerWeek(start_date)
+            ,ReservationPerWeek(start_date)
+        ]
 
-    #     with self.assertRaises(InvalidAmountOfReservationsOnFamiliyError):
-    #         family_reservation = FamilyReservation(reservation_list)
+        with self.assertRaises(InvalidAmountOfReservationsOnFamiliyError):
+            family_reservation = FamilyReservation(reservation_list)
 
 
     # def test_family_reservation_cannot_have_\
