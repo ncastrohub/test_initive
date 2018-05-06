@@ -125,5 +125,61 @@ class TestBikeReservation(unittest.TestCase):
             reservation.final_price()
 
 
+
+    
+    def test_recursive_family_reservation(self):
+        start_date = datetime.now()
+
+        reservation_hour = BikeReservationPerHour(start_date)
+        reservation_day = BikeReservationPerDay(start_date)
+        reservation_week = BikeReservationPerWeek(start_date)
+        
+        family_reserve_child, prima_value = _family_child_reserve(start_date)
+        
+
+        family_reservation = FamilyBikeReservation(
+            [reservation_hour, reservation_day, reservation_week, 
+            family_reserve_child]
+        )
+
+        reservation_hour.end(start_date + timedelta(hours=12))
+        reservation_day.end(start_date + timedelta(days=5))
+        reservation_week.end(start_date + timedelta(days=24))
+
+        not_discounted_price =  (COST_PER_DAY * 5) + (COST_PER_WEEK * 4) \
+            + (COST_PER_HOUR * 12) + prima_value
+        discount = (FAMILY_DISCOUNT * not_discounted_price) / 100.0
+        expected_cost = not_discounted_price - discount
+
+        self.assertEqual(
+            expected_cost,
+            family_reservation.final_price()
+        )
+
+
+def _family_child_reserve(start_date):
+    """Extract method for test"""
+    
+    reservation_hour_prima = BikeReservationPerHour(start_date)
+    reservation_day_prima = BikeReservationPerDay(start_date)
+    reservation_week_prima = BikeReservationPerWeek(start_date)
+
+    family_reservation_child = FamilyBikeReservation(
+        [reservation_day_prima, reservation_hour_prima, 
+            reservation_week_prima]
+    )
+
+    reservation_hour_prima.end(start_date + timedelta(hours=3))
+    reservation_day_prima.end(start_date + timedelta(days=10))
+    reservation_week_prima.end(start_date + timedelta(days=30))
+
+    prima_value_raw = (COST_PER_HOUR * 3) + \
+        (COST_PER_DAY * 10) + (COST_PER_WEEK * 5)
+    prima_discount = (FAMILY_DISCOUNT * prima_value_raw) / 100.0
+    prima_value = prima_value_raw - prima_discount
+
+    return family_reservation_child, prima_value
+
+
 if __name__ == '__main__':
     unittest.main()
