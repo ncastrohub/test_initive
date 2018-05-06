@@ -11,28 +11,9 @@ from model import (
     COST_PER_HOUR, 
     COST_PER_WEEK, 
     FAMILY_DISCOUNT,
-    InvalidAmountOfReservationsOnFamiliyError
+    InvalidAmountOfReservationsOnFamiliyError,
+    ReservationNotEndedError
 )
-
-# Context
-# A company rents bikes under following options:
-# 1. Rental by hour, charging $5 per hour
-# 2. Rental by day, charging $20 a day
-# 3. Rental by week, changing $60 a week
-# 4. Family Rental, is a promotion that can include from 3 to 5 Rentals (of any type) with a discount
-# of 30% of the total price
-
-# las opciones que tiene una empresa de bicicletas
-
-# podes rentar, por hora, y te sale 5 pesos la hora
-# podes rentar por dia y te sale 20$ por dia
-# podes restar por semana y te sale 60$ por semana
-# podes rentar familiar, que incluse de 3 a 5 autos y lo que haces
-# es rentar de 3 a 5 de cualquiera de los otros tipos
-
-# al total le resto el 30%
-
-# 
 
 
 class TestReservation(unittest.TestCase):
@@ -122,25 +103,26 @@ class TestReservation(unittest.TestCase):
             family_reservation = FamilyReservation(reservation_list)
 
 
-    # def test_family_reservation_cannot_have_\
-    #     less_than_three_asociated_rentals(self):
-    #     start_date = datetime.now()
+    def test_family_reservation_min_amount_of_childs(self):
+        """When a family reservation has less 
+        than 3 reservation childs, its fails"""
+        start_date = datetime.now()
 
-    #     reservation_list = [
-    #         ReservationPerHour(start_date) 
-    #         ,ReservationPerDay(start_date)
-    #     ]
+        reservation_list = [
+            ReservationPerHour(start_date) 
+            ,ReservationPerDay(start_date)
+        ]
 
-    #     with self.assertRaises(InvalidAmountOfReservationsOnFamiliyError):
-    #         family_reservation = FamilyReservation(reservation_list)
+        with self.assertRaises(InvalidAmountOfReservationsOnFamiliyError):
+            family_reservation = FamilyReservation(reservation_list)
 
 
-    # def test_cannot_have_final_price_of_not_ended_reservation(self)
-    #     start_date = datetime.now()
-    #     reservation = ReservationPerHour(start_date) 
+    def test_cannot_have_final_price_of_not_ended_reservation(self):
+        start_date = datetime.now()
+        reservation = ReservationPerHour(start_date) 
 
-    #     with self.assertRaises(ReservationNotEndedError):
-    #         reservation.final_price()
+        with self.assertRaises(ReservationNotEndedError):
+            reservation.final_price()
 
 
 if __name__ == '__main__':
