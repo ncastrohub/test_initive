@@ -3,10 +3,10 @@ from datetime import datetime, timedelta
 from model import (
     ReservationPerHour, 
     ReservationPerDay, 
-    # ReservationPerWeek, 
+    ReservationPerWeek, 
     COST_PER_DAY, 
     COST_PER_HOUR, 
-    # COST_PER_WEEK, 
+    COST_PER_WEEK, 
     # FAMILY_DISCOUNT
 )
 
@@ -45,7 +45,6 @@ class TestReservation(unittest.TestCase):
             reservation.final_price()
         )
 
-
     def test_when_rent_a_bike_per_day_the_price_is_per_each_day(self):
         start_date = datetime.now()
         reservation = ReservationPerDay(start_date)
@@ -57,18 +56,21 @@ class TestReservation(unittest.TestCase):
             reservation.final_price()
         )
 
+    def test_when_rent_a_bike_per_week_the_price_is_per_each_week(self):
+        start_date = datetime.now()
+        reservation = ReservationPerWeek(start_date)
+        
+        #I assume that when a week starts, means a full week
+        # eight days cost two weeks
 
-    # def test_when_rent_a_bike_per_week_the_price_is_per_each_week(self):
-    #     start_date = datetime.now()
-    #     reservation = ReservationPerWeek(start_date)
-    #     start_date = date.today()
-    #     reserved_days = 7
-    #     end_date = start_date + datetime.timedelta(days=reserved_days)
-    #     reservation.end(end_date)
-    #     self.assertEqual(
-    #         COST_PER_WEEK * reserved_days, 
-    #         reservation.final_price()
-    #     )
+        reserved_days = 8
+
+        end_date = start_date + timedelta(days=reserved_days)
+        reservation.end(end_date)
+        self.assertEqual(
+            COST_PER_WEEK * 2, 
+            reservation.final_price()
+        )
 
 
     # def test_when_rent_type_family_the_price_is_the_total_with_discount(self):
