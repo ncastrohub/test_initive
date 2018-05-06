@@ -1,13 +1,16 @@
+#!/usr/bin/env python
+
 import unittest
 from datetime import datetime, timedelta
 from model import (
     ReservationPerHour, 
     ReservationPerDay, 
-    ReservationPerWeek, 
+    ReservationPerWeek,
+    FamilyReservation,
     COST_PER_DAY, 
     COST_PER_HOUR, 
     COST_PER_WEEK, 
-    # FAMILY_DISCOUNT
+    FAMILY_DISCOUNT
 )
 
 # Context
@@ -73,34 +76,31 @@ class TestReservation(unittest.TestCase):
         )
 
 
-    # def test_when_rent_type_family_the_price_is_the_total_with_discount(self):
-    #     start_date = datetime.now()
+    def test_when_rent_type_family_the_price_is_the_total_with_discount(self):
+        start_date = datetime.now()
 
-    #     reservation_hour = ReservationPerHour(start_date)
-    #     reservation_day = ReservationPerDay(start_date)
-    #     reservation_week = ReservationPerWeek(start_date)
+        reservation_hour = ReservationPerHour(start_date)
+        reservation_day = ReservationPerDay(start_date)
+        reservation_week = ReservationPerWeek(start_date)
         
-    #     family_reservation = FamilyReservation(
-    #         [reservation_hour, reservation_day, reservation_week]
-    #     )
+        family_reservation = FamilyReservation(
+            [reservation_hour, reservation_day, reservation_week]
+        )
 
-    #     reservation_hour.end(start_date + datetime.timedelta(hours=12))
-    #     reservation_day.end(start_date + datetime.timedelta(days=5))
-    #     reservation_week.end(start_date + datetime.timedelta(days=24))
+        reservation_hour.end(start_date + timedelta(hours=12))
+        reservation_day.end(start_date + timedelta(days=5))
+        reservation_week.end(start_date + timedelta(days=24))
 
-    #     not_discounted_price = 
-    #         (COST_PER_DAY * 5) + 
-    #         (COST_PER_WEEK * 4) + 
-    #         (COST_PER_HOUR * 12)
+        not_discounted_price =  (COST_PER_DAY * 5) + (COST_PER_WEEK * 4) \
+            + (COST_PER_HOUR * 12)
 
-    #     discount = (FAMILY_DISCOUNT * not_discounted_price) / 100.0
-    #     expected_cost = not_discounted_price - discount
-        
+        discount = (FAMILY_DISCOUNT * not_discounted_price) / 100.0
+        expected_cost = not_discounted_price - discount
 
-    #     self.assertEqual(
-    #         expected_cost,
-    #         family_reservation.final_price()
-    #     )
+        self.assertEqual(
+            expected_cost,
+            family_reservation.final_price()
+        )
 
 
     # def test_family_reservation_cannot_have\
