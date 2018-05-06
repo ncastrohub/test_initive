@@ -9,7 +9,7 @@ COST_PER_DAY = 20
 COST_PER_WEEK = 60
 FAMILY_DISCOUNT = 30
 
-class AbstractReservation(metaclass=ABCMeta):
+class AbstractBikeReservation(metaclass=ABCMeta):
     """Abstract for reservation final_price"""
     
     @abstractmethod
@@ -17,7 +17,7 @@ class AbstractReservation(metaclass=ABCMeta):
         pass
 
 
-class ReservationLeaf(AbstractReservation, metaclass=ABCMeta):
+class BikeReservationLeaf(AbstractBikeReservation, metaclass=ABCMeta):
     """Abstract for reservation final_price"""
     def __init__(self, start_date):
         self.start_date = start_date
@@ -33,7 +33,7 @@ class ReservationLeaf(AbstractReservation, metaclass=ABCMeta):
         try:
             return self._leaf_final_price()
         except AttributeError as error:
-            raise ReservationNotEndedError()
+            raise BikeReservationNotEndedError()
 
 
     @abstractmethod
@@ -41,10 +41,10 @@ class ReservationLeaf(AbstractReservation, metaclass=ABCMeta):
         pass
 
 
-class FamilyReservation(AbstractReservation):
+class FamilyBikeReservation(AbstractBikeReservation):
     def __init__(self, child_reservations):
         if len(child_reservations) > 5 or len(child_reservations) < 3:
-            raise InvalidAmountOfReservationsOnFamiliyError()
+            raise InvalidAmountOfBikeReservationsOnFamiliyError()
         self.child_reservations = child_reservations
 
     def final_price(self):
@@ -56,7 +56,7 @@ class FamilyReservation(AbstractReservation):
 
 
 
-class ReservationPerHour(ReservationLeaf):
+class BikeReservationPerHour(BikeReservationLeaf):
     """ A reservation that calculates its price by hour """
 
     def _leaf_final_price(self):
@@ -65,7 +65,7 @@ class ReservationPerHour(ReservationLeaf):
         return hours * COST_PER_HOUR
 
 
-class ReservationPerDay(ReservationLeaf):
+class BikeReservationPerDay(BikeReservationLeaf):
     """ A reservation that calculates its price by day """
 
     def _leaf_final_price(self):
@@ -74,7 +74,7 @@ class ReservationPerDay(ReservationLeaf):
         return hours * COST_PER_DAY
 
 
-class ReservationPerWeek(ReservationLeaf):
+class BikeReservationPerWeek(BikeReservationLeaf):
     """ A reservation that calculates its price by day """
 
     def _leaf_final_price(self):
@@ -84,8 +84,8 @@ class ReservationPerWeek(ReservationLeaf):
         return weeks * COST_PER_WEEK
 
 
-class ReservationNotEndedError(Exception):
+class BikeReservationNotEndedError(Exception):
     pass
 
-class InvalidAmountOfReservationsOnFamiliyError(Exception):
+class InvalidAmountOfBikeReservationsOnFamiliyError(Exception):
     pass

@@ -3,25 +3,25 @@
 import unittest
 from datetime import datetime, timedelta
 from model import (
-    ReservationPerHour, 
-    ReservationPerDay, 
-    ReservationPerWeek,
-    FamilyReservation,
+    BikeReservationPerHour, 
+    BikeReservationPerDay, 
+    BikeReservationPerWeek,
+    FamilyBikeReservation,
     COST_PER_DAY, 
     COST_PER_HOUR, 
     COST_PER_WEEK, 
     FAMILY_DISCOUNT,
-    InvalidAmountOfReservationsOnFamiliyError,
-    ReservationNotEndedError
+    InvalidAmountOfBikeReservationsOnFamiliyError,
+    BikeReservationNotEndedError
 )
 
 
-class TestReservation(unittest.TestCase):
+class TestBikeReservation(unittest.TestCase):
 
 
     def test_when_rent_a_bike_per_hour_the_price_is_per_each_hour(self):
         start_date = datetime.now()
-        reservation = ReservationPerHour(start_date)
+        reservation = BikeReservationPerHour(start_date)
         reserved_hours = 3
         end_date = start_date + timedelta(hours=reserved_hours)
         reservation.end(end_date)
@@ -32,7 +32,7 @@ class TestReservation(unittest.TestCase):
 
     def test_when_rent_a_bike_per_day_the_price_is_per_each_day(self):
         start_date = datetime.now()
-        reservation = ReservationPerDay(start_date)
+        reservation = BikeReservationPerDay(start_date)
         reserved_days = 5
         end_date = start_date + timedelta(days=reserved_days)
         reservation.end(end_date)
@@ -43,7 +43,7 @@ class TestReservation(unittest.TestCase):
 
     def test_when_rent_a_bike_per_week_the_price_is_per_each_week(self):
         start_date = datetime.now()
-        reservation = ReservationPerWeek(start_date)
+        reservation = BikeReservationPerWeek(start_date)
         
         #I assume that when a week starts, means a full week
         # eight days cost two weeks
@@ -61,11 +61,11 @@ class TestReservation(unittest.TestCase):
     def test_when_rent_type_family_the_price_is_the_total_with_discount(self):
         start_date = datetime.now()
 
-        reservation_hour = ReservationPerHour(start_date)
-        reservation_day = ReservationPerDay(start_date)
-        reservation_week = ReservationPerWeek(start_date)
+        reservation_hour = BikeReservationPerHour(start_date)
+        reservation_day = BikeReservationPerDay(start_date)
+        reservation_week = BikeReservationPerWeek(start_date)
         
-        family_reservation = FamilyReservation(
+        family_reservation = FamilyBikeReservation(
             [reservation_hour, reservation_day, reservation_week]
         )
 
@@ -91,16 +91,16 @@ class TestReservation(unittest.TestCase):
         start_date = datetime.now()
 
         reservation_list = [
-            ReservationPerHour(start_date) 
-            ,ReservationPerDay(start_date)
-            ,ReservationPerDay(start_date)
-            ,ReservationPerWeek(start_date)
-            ,ReservationPerWeek(start_date)
-            ,ReservationPerWeek(start_date)
+            BikeReservationPerHour(start_date) 
+            ,BikeReservationPerDay(start_date)
+            ,BikeReservationPerDay(start_date)
+            ,BikeReservationPerWeek(start_date)
+            ,BikeReservationPerWeek(start_date)
+            ,BikeReservationPerWeek(start_date)
         ]
 
-        with self.assertRaises(InvalidAmountOfReservationsOnFamiliyError):
-            family_reservation = FamilyReservation(reservation_list)
+        with self.assertRaises(InvalidAmountOfBikeReservationsOnFamiliyError):
+            family_reservation = FamilyBikeReservation(reservation_list)
 
 
     def test_family_reservation_min_amount_of_childs(self):
@@ -109,19 +109,19 @@ class TestReservation(unittest.TestCase):
         start_date = datetime.now()
 
         reservation_list = [
-            ReservationPerHour(start_date) 
-            ,ReservationPerDay(start_date)
+            BikeReservationPerHour(start_date) 
+            ,BikeReservationPerDay(start_date)
         ]
 
-        with self.assertRaises(InvalidAmountOfReservationsOnFamiliyError):
-            family_reservation = FamilyReservation(reservation_list)
+        with self.assertRaises(InvalidAmountOfBikeReservationsOnFamiliyError):
+            family_reservation = FamilyBikeReservation(reservation_list)
 
 
     def test_cannot_have_final_price_of_not_ended_reservation(self):
         start_date = datetime.now()
-        reservation = ReservationPerHour(start_date) 
+        reservation = BikeReservationPerHour(start_date) 
 
-        with self.assertRaises(ReservationNotEndedError):
+        with self.assertRaises(BikeReservationNotEndedError):
             reservation.final_price()
 
 
